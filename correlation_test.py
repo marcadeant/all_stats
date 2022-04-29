@@ -1,5 +1,41 @@
-def spearman_test(x, y, alpha=0.05):
+from scipy.stats import chi2_contingency
+import numpy as np
+import seaborn as sns
+from scipy.stats import shapiro
+import scipy.stats as st
+from matplotlib import pyplot as plt
+import researchpy
 
+
+def shapiro_test(x, alpha=0.05):
+    x1, pval1 = shapiro(x)
+    print("=" * 100, "\n")
+    print("\t\t\t\t\t TEST DE LA NORMALITE (TEST DE SHAPIRO) \n")
+    print("=" * 100, "\n")
+    print("""
+    \t##### \033[1m0. Hypothèse du test\033[0m #####\n
+    H0 : \033[1m{0}\033[0m suit une loi normale \n
+    H1 : \033[1m{0}\033[0m ne suit pas une loi normale \n
+
+    \t##### \033[1m1. Paramètre du test de Shapiro\033[0m #####\n
+    Variable aléatoire étudiée : \033[1m{0}\033[0m\n
+    Indice de confiance : \033[1m{1}\033[0m\n
+    Taille de l'échantillon : \033[1m{2}\033[0m\n
+
+    \t #### \033[1m2. Résultat du test\033[0m ####\n
+    p-value de shapiro : \033[1m{3}\033[0m\n
+    coefficient de shapiro : \033[1m{4}\033[0m\n 
+
+    \t #### \033[1m3. Conclusion du test\033[0m ####\n""".format(x.name, alpha, x.shape[0], pval1, x1))
+    if pval1 < alpha:
+        print("L'hypothèse nulle est rejetée \t ==> \033[1m{}\033[0m ne suit pas une loi normale".format(x.name))
+    else:
+        print("On ne peut pas rejeter l'hypothèse nulle H0 (\033[1m{}\033[0m suit une loi normale)".format(x.name))
+    print()
+    print("=" * 100, "\n")
+
+
+def spearman_test(x, y, alpha=0.05):
     pvalue = st.spearmanr(x, y)[1]
     rs = st.spearmanr(x, y)[0]
     print("=" * 100, "\n")
