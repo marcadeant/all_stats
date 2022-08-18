@@ -44,7 +44,7 @@ def spearman_test(x, y, alpha=0.05):
     print("""\t##### \033[1m0. Hypothèse du test\033[0m #####\n
     H0 : Les variables {0} sont indépendantes\n
     H1 : Les variables {0} sont corrélées\n
-    \t##### \033[1m1. Paramètre du test de Shapiro\033[0m #####\n
+    \t##### \033[1m1. Paramètre du test\033[0m #####\n
     Variables aléatoires étudiées : \033[1m{0}\033[0m\n
     Indice de confiance : \033[1m{1}\033[0m\n
     Taille de l'échantillon : \033[1m{2}\033[0m\n
@@ -147,3 +147,56 @@ def chi2test(data, x, y, alpha=0.05):
     {}""".format(coeff_cramer, qual))
     print("\n")
     print("=" * 100, "\n")
+    
+
+
+def pearson_test(x, y, alpha=0.05):
+    pvalue = st.pearsonr(x, y)[1]
+    rs = st.pearsonr(x, y)[0]
+    print("=" * 100, "\n")
+    print("\t\t\t\t\t  \033[1mTEST D'INDEPENDANCE DE PEARSON \033[0m \n")
+    print("=" * 100, "\n")
+    print("""\t##### \033[1m0. Hypothèse du test\033[0m #####\n
+    H0 : Les variables {0} sont indépendantes\n
+    H1 : Les variables {0} sont corrélées\n
+    \t##### \033[1m1. Paramètre du test \033[0m #####\n
+    Variables aléatoires étudiées : \033[1m{0}\033[0m\n
+    Indice de confiance : \033[1m{1}\033[0m\n
+    Taille de l'échantillon : \033[1m{2}\033[0m\n
+
+    \t #### \033[1m2. Résultat du test\033[0m ####\n
+    coefficient de Spearman : \033[1m{3}\033[0m\n
+    p-value associée au test de Spearman : \033[1m{4}\033[0m\n
+    \t #### \033[1m3. Conclusion du test\033[0m ####\n""".format((x.name, y.name), alpha, x.shape[0], rs, pvalue))
+    
+    if abs(rs) < .10:
+        qual = 'négligeable (ou nulle)'
+    elif abs(rs) < .20:
+        qual = 'faible'
+    elif abs(rs) < .40:
+        qual = 'modérée'
+    elif abs(rs) < .60:
+        qual = 'plutôt forte'
+    elif abs(rs) < .80:
+        qual = 'forte'
+    else:
+        qual = 'très forte'
+    print()
+    if rs == 0:
+        print(" --> On ne peut pas rejeter l'hypothèse nulle H0 (Les variables sont indépendantes)")
+    elif rs < 0:
+        if pvalue < alpha:
+            print(
+                """ --> \033[1m{}\033[0m présentent \033[1msignificativement\033[0m une \033[1m{}\033[0m corrélation négative.""".format(
+                    (x.name, y.name), qual))
+        else:
+            print(" --> \033[1m{}\033[0m présentent une corrélation négative \033[1m{} peu significative\033[0m".format(
+                (x.name, y.name), qual))
+    elif rs > 0:
+        if pvalue < alpha:
+            print(
+                " --> \033[1m{}\033[0m présentent \033[1msignificativement\033[0m une \033[1m{}\033[0m corrélation positive.".format(
+                    (x.name, y.name), qual))
+        else:
+            print(" --> \033[1m{}\033[0m présentent une corrélation {} positive \033[1mpeu significative\033[0m".format(
+                (x.name, y.name), qual))
