@@ -1,5 +1,5 @@
 # all_stats
- Python library for automated statisticals tests for all
+ Python library for automated statisticals tests for beginners
 
 # Installation 
 
